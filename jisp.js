@@ -56,6 +56,10 @@
      global_env.set(n, Math[n]);
    });
 
+  function truth(t) {
+    return Array.isArray(t) ? t.length : t;
+  }
+
   function eval(x, env) {
     env = env || global_env;
     if (typeof x === 'string') // all strings are symbols; variable reference
@@ -65,7 +69,7 @@
     if (x[0] === 'quote') // (quote exp)
       return x[1];
     if (x[0] === 'if') // (if test conseq alt)
-      return eval(eval(x[1], env) ? x[2] : x[3], env);
+      return eval(truth(eval(x[1], env)) ? x[2] : x[3], env);
     if (x[0] === 'set!') // (set! var exp)
       return env.find(x[1]).set(x[1], eval(x[1], env));
     if (x[0] === 'define') // (define var exp)
