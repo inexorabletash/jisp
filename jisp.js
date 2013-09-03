@@ -1,4 +1,3 @@
-
 // Minimal LISP in JavaScript
 // Based on lispy: http://norvig.com/lispy.html
 
@@ -6,7 +5,7 @@
 
   function Env(params, args, outer) {
     this.outer = outer;
-    this.dict = {};
+    this.dict = Object.create(null);
     this.get = function(v) { return this.dict['$'+v]; };
     this.set = function(v, val) { this.dict['$'+v] = val; };
     this.find = function(v) {
@@ -24,31 +23,38 @@
 
   var global_env = new Env();
   var glob_init = {
-    '+': function(a, b /*...*/) { return [].reduce.call(arguments, function(a,b){return a+b;}); },
+    '+': function() { return [].reduce.call(arguments, function(a, b) { return a + b; }); },
     '-': function(a, b) { return a-b; },
-    '*': function(a, b /*...*/) { return [].reduce.call(arguments, function(a,b){return a*b;}); },
+    '*': function() { return [].reduce.call(arguments, function(a, b) { return a * b; }); },
     '/': function(a, b) { return a/b; },
+    'and': function(a, b) { return a && b; },
+    'or': function(a, b) { return a || b; },
     'not': function(a) { return !a; },
-    '>': function(a, b) { return a>b; },
-    '<': function(a, b) { return a<b; },
-    '>=': function(a, b) { return a>=b; },
-    '<=': function(a, b) { return a<=b; },
+    '>': function(a, b) { return a > b; },
+    '<': function(a, b) { return a < b; },
+    '>=': function(a, b) { return a >= b; },
+    '<=': function(a, b) { return a <= b; },
     '=': function(a, b) { return a == b; },
-    'equal?': function(a, b) { return a == b; },
+    'equal?': function(a, b) { return a === b; },
     'eq?': function(a, b) { return a === b; },
     'length': function(a) { return a.length; },
     'cons': function(a, b) { return [a].concat(b); },
     'car': function(a) { return a[0]; },
     'cdr': function(a) { return a.slice(1); },
     'append': function(a, b) { return a.concat(b); },
-    //'list': function() {} // TODO??
+    'list': function() { return [].slice.call(arguments); },
     'list?': function(a) { return Array.isArray(a); },
-    'null?': function(a) { return !a; }, // TODO??
+    'null?': function(a) { return Array.isArray(a) && !a.length; },
     'symbol?': function(a) { return typeof a === 'string'; }
   };
   Object.keys(glob_init).forEach(function(key) {
     global_env.set(key, glob_init[key]);
   });
+  ['abs', 'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'exp',
+   'floor', 'log', 'max', 'min', 'pow', 'random', 'round', 'sin',
+   'sqrt', 'tan'].forEach(function(n) {
+     global_env.set(n, Math[n]);
+   });
 
   function eval(x, env) {
     env = env || global_env;
@@ -121,7 +127,7 @@
 
   function replish(str) {
     var program = parse(str);
-    return eval(program);
+    return to_string(eval(program));
   }
 
   global.replish = replish;
