@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<body>
+<pre id="output"></pre>
+<input id="input" placeholder="Type code here...">
+
+<style>
+
+body {
+  width: 100%; height: 100%;
+  margin: 0; padding: 0;
+}
+
+#output {
+  position: absolute;
+  top: 10px; bottom: 110px; left: 10px; right: 10px;
+  margin: 0;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  color: #404040;
+  font-family: 'Courier New', monospace;
+  font-size: 15pt;
+}
+
+#input {
+  position: absolute;
+  height: 80px; bottom: 10px; left: 10px; right: 10px;
+  margin: 0;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  font-family: 'Courier New', monospace;
+  font-size: 20pt;
+}
+
+</style>
+<script src="jisp.js"></script>
+<script>
+document.querySelector('#input').addEventListener('keydown', function(e) {
+  if (e.keyCode !== 13) // Enter/Return
+    return;
+
+  var str = document.querySelector('#input').value;
+  document.querySelector('#input').value = '';
+
+  var output = document.querySelector('#output');
+  output.appendChild(document.createTextNode('>> ' + str + '\n'));
+
+  try {
+    var out = String(replish(str));
+    output.appendChild(document.createTextNode(out + '\n'));
+  } catch (e) {
+    output.appendChild(document.createTextNode(e + '\n'));
+  }
+  output.normalize();
+
+});
+document.querySelector('#input').focus();
+</script>
+
+</body>
