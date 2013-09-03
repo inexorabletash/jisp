@@ -15,9 +15,8 @@
     };
 
     if (params && args) {
-      for (var i = 0; i < params.length; ++i) {
+      for (var i = 0; i < params.length; ++i)
         this.set(params[i], args[i]);
-      }
     }
   }
 
@@ -56,9 +55,7 @@
      global_env.set(n, Math[n]);
    });
 
-  function truth(t) {
-    return Array.isArray(t) ? t.length : t;
-  }
+  function truth(t) { return Array.isArray(t) ? t.length : t; }
 
   function eval(x, env) {
     env = env || global_env;
@@ -77,9 +74,8 @@
     if (x[0] === 'lambda') // (lambda (var*) exp)
       return function() { return eval(x[2], new Env(x[1], arguments, env)); };
     if (x[0] === 'begin') { // (begin exp*)
-      for (var i = 1; i < x.length; ++i) {
+      for (var i = 1; i < x.length; ++i)
         var val = eval(x[i], env);
-      }
       return val;
     }
     // (proc exp*)
@@ -88,10 +84,9 @@
     return proc.apply(null, exps);
   }
 
-  function read(s) {
+  function parse(s) {
     return read_from(tokenize(s));
   }
-  var parse = read;
 
   function tokenize(s) {
     return s.replace(/\(/g, ' ( ').replace(/\)/g, ' ) ').replace(/^\s+|\s+$/g, '').split(/\s+/g);
