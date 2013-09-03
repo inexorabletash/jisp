@@ -83,16 +83,23 @@ document.querySelector('#input').addEventListener('keydown', function(e) {
   var str = document.querySelector('#input').value;
   document.querySelector('#input').value = '';
 
+  process(str);
+});
+
+function process(str) {
   var output = document.querySelector('#output');
 
   var span = document.createElement('span');
   span.appendChild(document.createTextNode('>> ' + str + '\n'));
   span.className = 'entry';
   output.appendChild(span);
+  output.scrollTop = output.scrollHeight;
 
   span = document.createElement('span');
   try {
-    var out = String(replish(str));
+    var out = repl(str);
+    if (out === undefined)
+      return;
     span.appendChild(document.createTextNode(out + '\n'));
     span.className = 'result';
   } catch (e) {
@@ -102,9 +109,26 @@ document.querySelector('#input').addEventListener('keydown', function(e) {
   output.appendChild(span);
 
   output.scrollTop = output.scrollHeight;
+}
 
-});
+[
+  "(define area (lambda (r) (* 3.141592653 (* r r))))",
+  "(area 3)",
+  "(define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))",
+  "(fact 10)",
+  "(fact 100)",
+  "(area (fact 10))",
+  "(define first car)",
+  "(define rest cdr)",
+  "(define count (lambda (item L) (if L (+ (equal? item (first L)) (count item (rest L))) 0)))",
+  "(count 0 (list 0 1 2 3 0 0))",
+  "(count (quote the) (quote (the more the merrier the bigger the better)))"
+].forEach(process);
+
+
 document.querySelector('#input').focus();
+
+
 </script>
 
 <a target="_blank" href="https://github.com/inexorabletash/jisp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>

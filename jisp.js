@@ -125,15 +125,14 @@
   function to_string(exp) {
     if (Array.isArray(exp))
       return '(' + exp.map(to_string).join(' ') + ')';
-    else
-      return String(exp);
+    return String(exp);
   }
 
-  function replish(str) {
-    var program = parse(str);
-    return to_string(eval(program));
+  function repl(str) {
+    var result = eval(parse(str));
+    return result === undefined ? undefined : to_string(result);
   }
 
-  global.replish = replish;
+  global.repl = repl;
 
 }(this));
