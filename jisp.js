@@ -57,7 +57,7 @@
 
   function truth(t) { return Array.isArray(t) ? t.length : t; }
 
-  function eval(x, env) {
+  function _eval(x, env) {
     env = env || global_env;
     if (typeof x === 'string') // all strings are symbols; variable reference
       return env.find(x).get(x);
@@ -66,20 +66,21 @@
     if (x[0] === 'quote') // (quote exp)
       return x[1];
     if (x[0] === 'if') // (if test conseq alt)
-      return eval(truth(eval(x[1], env)) ? x[2] : x[3], env);
+      return _eval(truth(_eval(x[1], env)) ? x[2] : x[3], env);
     if (x[0] === 'set!') // (set! var exp)
-      return env.find(x[1]).set(x[1], eval(x[1], env));
+      return env.find(x[1]).set(x[1], _eval(x[1], env));
     if (x[0] === 'define') // (define var exp)
-      return env.set(x[1], eval(x[2], env));
+      return env.set(x[1], _eval(x[2], env));
     if (x[0] === 'lambda') // (lambda (var*) exp)
-      return function() { return eval(x[2], new Env(x[1], arguments, env)); };
+      return function() { return _eval(x[2], new Env(x[1], arguments, env)); };
     if (x[0] === 'begin') { // (begin exp*)
+      var val;
       for (var i = 1; i < x.length; ++i)
-        var val = eval(x[i], env);
+        val = _eval(x[i], env);
       return val;
     }
     // (proc exp*)
-    var exps = x.map(function(exp) { return eval(exp, env); });
+    var exps = x.map(function(exp) { return _eval(exp, env); });
     var proc = exps.shift();
     return proc.apply(null, exps);
   }
@@ -124,7 +125,7 @@
   }
 
   function repl(str) {
-    var result = eval(parse(str));
+    var result = _eval(parse(str));
     return result === undefined ? undefined : to_string(result);
   }
 
