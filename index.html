@@ -2,23 +2,6 @@
 <title>JiSp</title>
 <meta charset="utf-8">
 <link rel="shortcut icon" href="favicon.ico">
-
-<body>
-<div id="header">
-  <h1>JiSp - minimal Lisp interpreter in JavaScript</h1>
-  <div>
-    Adapted from <a target="_blank" href="http://norvig.com/lispy.html">Lispy by Peter Norvig</a>
-    &mdash;
-    <a target="_blank" href="https://github.com/inexorabletash/jisp/blob/master/jisp.js">View Source</a>
-  </div>
-</div>
-
-<pre id="output"></pre>
-
-<div id="inputbox">
-<input id="input" placeholder="Type lots of silly parentheses here...">
-</div>
-
 <style>
 @import url(http://fonts.googleapis.com/css?family=Montserrat+Alternates|PT+Mono);
 
@@ -87,6 +70,23 @@ h1 { margin: 0; }
 }
 
 </style>
+
+<body>
+<div id="header">
+  <h1>JiSp - minimal Lisp interpreter in JavaScript</h1>
+  <div>
+    Adapted from <a target="_blank" href="http://norvig.com/lispy.html">Lispy by Peter Norvig</a>
+    &mdash;
+    <a target="_blank" href="https://github.com/inexorabletash/jisp/blob/master/jisp.js">View Source</a>
+  </div>
+</div>
+
+<pre id="output"></pre>
+
+<div id="inputbox">
+<input id="input" placeholder="Type lots of silly parentheses here...">
+</div>
+
 <script src="jisp.js"></script>
 <script>
 document.querySelector('#input').addEventListener('keydown', function(e) {
